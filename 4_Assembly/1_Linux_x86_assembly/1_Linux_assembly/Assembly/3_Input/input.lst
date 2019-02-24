@@ -1,0 +1,356 @@
+     1                                 %line 1+1 input.asm
+     2                                 
+     3                                 
+     4                                 
+     5                                 [section .data]
+     6                                 
+     7                                 
+     8                                 
+     9                                 
+    10                                 LF equ 10
+    11                                 NULL equ 0
+    12                                 
+    13                                 TRUE equ 1
+    14                                 FALSE equ 0
+    15                                 
+    16                                 EXIT_SUCCESS equ 0
+    17                                 
+    18                                 STDIN equ 0
+    19                                 STDOUT equ 1
+    20                                 STDERR equ 2
+    21                                 
+    22                                 SYS_read equ 0
+    23                                 SYS_write equ 1
+    24                                 SYS_open equ 2
+    25                                 SYS_close equ 3
+    26                                 SYS_fork equ 57
+    27                                 SYS_exit equ 60
+    28                                 SYS_creat equ 85
+    29                                 SYS_time equ 201
+    30                                 
+    31                                 
+    32                                 
+    33                                 
+    34                                 STRLEN equ 50
+    35                                 
+    36 00000000 2A2A2A2A2A2A2A2A2A-    welcomeOne db "******************************************************", NULL, LF
+    37 00000000 2A2A2A2A2A2A2A2A2A-
+    38 00000000 2A2A2A2A2A2A2A2A2A-
+    39 00000000 2A2A2A2A2A2A2A2A2A-
+    40 00000000 2A2A2A2A2A2A2A2A2A-
+    41 00000000 2A2A2A2A2A2A2A2A2A-
+    42 00000000 000A               
+    43 00000038 2A2A2A2A2A2A57656C-    welcomeTwo db "******Welcome to my first Assembly program1************", NULL, LF
+    44 00000038 636F6D6520746F206D-
+    45 00000038 792066697273742041-
+    46 00000038 7373656D626C792070-
+    47 00000038 726F6772616D312A2A-
+    48 00000038 2A2A2A2A2A2A2A2A2A-
+    49 00000038 2A000A             
+    50 00000071 2A2A2A2A2A2A2A2A2A-    welcomeThree db "******************************************************", NULL, LF
+    51 00000071 2A2A2A2A2A2A2A2A2A-
+    52 00000071 2A2A2A2A2A2A2A2A2A-
+    53 00000071 2A2A2A2A2A2A2A2A2A-
+    54 00000071 2A2A2A2A2A2A2A2A2A-
+    55 00000071 2A2A2A2A2A2A2A2A2A-
+    56 00000071 000A               
+    57                                 
+    58 000000A9 2A2A2A2A2A2A2A2A2A-    goodbyeOne db "******************************************************", NULL, LF
+    59 000000A9 2A2A2A2A2A2A2A2A2A-
+    60 000000A9 2A2A2A2A2A2A2A2A2A-
+    61 000000A9 2A2A2A2A2A2A2A2A2A-
+    62 000000A9 2A2A2A2A2A2A2A2A2A-
+    63 000000A9 2A2A2A2A2A2A2A2A2A-
+    64 000000A9 000A               
+    65 000000E1 2A2A2A2A2A2A2A2A2A-    goodbyeTwo db "**********************GOOD BYE!***********************", NULL, LF
+    66 000000E1 2A2A2A2A2A2A2A2A2A-
+    67 000000E1 2A2A2A2A474F4F4420-
+    68 000000E1 425945212A2A2A2A2A-
+    69 000000E1 2A2A2A2A2A2A2A2A2A-
+    70 000000E1 2A2A2A2A2A2A2A2A2A-
+    71 000000E1 000A               
+    72 00000119 2A2A2A2A2A2A2A2A2A-    goodbyeThree db "******************************************************", NULL, LF
+    73 00000119 2A2A2A2A2A2A2A2A2A-
+    74 00000119 2A2A2A2A2A2A2A2A2A-
+    75 00000119 2A2A2A2A2A2A2A2A2A-
+    76 00000119 2A2A2A2A2A2A2A2A2A-
+    77 00000119 2A2A2A2A2A2A2A2A2A-
+    78 00000119 000A               
+    79                                 
+    80 00000151 50524F4752414D204D-    menu1 db "PROGRAM MENU: Choose an option", NULL, LF
+    81 00000151 454E553A2043686F6F-
+    82 00000151 736520616E206F7074-
+    83 00000151 696F6E000A         
+    84 00000171 312D46756E6374696F-    menu2 db "1-Function1", NULL, LF
+    85 00000171 6E31000A           
+    86 0000017E 322D46756E6374696F-    menu3 db "2-Function2", NULL, LF
+    87 0000017E 6E32000A           
+    88 0000018B 332D46756E6374696F-    menu4 db "3-Function3", NULL, LF
+    89 0000018B 6E33000A           
+    90 00000198 342D46756E6374696F-    menu5 db "4-Function4", NULL, LF
+    91 00000198 6E34000A           
+    92 000001A5 352D546573745F4675-    menu6 db "5-Test_Function", NULL, LF
+    93 000001A5 6E6374696F6E000A   
+    94 000001B6 302D45786974207072-    menu7 db "0-Exit program", NULL, LF
+    95 000001B6 6F6772616D000A     
+    96                                 
+    97                                 
+    98                                 
+    99                                 EXIT equ 48
+   100                                 func_max equ 5
+   101 000001C6 456E7465722061206E-    greaterThanMaxMessage db "Enter a number between 0 and 4", NULL, LF
+   102 000001C6 756D62657220626574-
+   103 000001C6 7765656E203020616E-
+   104 000001C6 642034000A         
+   105                                 ONE equ 49
+   106                                 TWO equ 50
+   107                                 THREE equ 51
+   108                                 FOUR equ 52
+   109                                 FIVE equ 53
+   110                                 
+   111                                 
+   112 000001E6 57656C636F6D652074-    oneMessage db "Welcome to function one!", NULL, LF
+   113 000001E6 6F2066756E6374696F-
+   114 000001E6 6E206F6E6521000A   
+   115 00000200 57656C636F6D652074-    twoMessage db "Welcome to function two!", NULL, LF
+   116 00000200 6F2066756E6374696F-
+   117 00000200 6E2074776F21000A   
+   118 0000021A 57656C636F6D652074-    threeMessage db "Welcome to function three!", NULL, LF
+   119 0000021A 6F2066756E6374696F-
+   120 0000021A 6E2074687265652100-
+   121 0000021A 0A                 
+   122 00000236 57656C636F6D652074-    fourMessage db "Welcome to function four!", NULL, LF
+   123 00000236 6F2066756E6374696F-
+   124 00000236 6E20666F757221000A 
+   125 00000251 57656C636F6D652074-    fiveMessage db "Welcome to function five!", NULL, LF
+   126 00000251 6F2066756E6374696F-
+   127 00000251 6E206669766521000A 
+   128                                 
+   129 0000026C 456E7465722073656C-    pmpt db "Enter selection: ", NULL
+   130 0000026C 656374696F6E3A2000 
+   131 0000027E 0A00                   newLine db LF, NULL
+   132                                 
+   133                                 [section .bss]
+   134 00000000 <gap>                  char resb 1
+   135 00000001 <gap>                  inLine resb STRLEN+2
+   136                                 
+   137                                 
+   138                                 [section .text]
+   139                                 [global _start]
+   140                                 _start:
+   141                                 
+   142                                 
+   143                                 
+   144                                 
+   145                                 
+   146 00000000 48C7C7[00000000]        mov rdi, welcomeOne
+   147 00000007 E882010000              call printString
+   148 0000000C E823020000              call printLinefeed
+   149 00000011 48C7C7[00000000]        mov rdi, welcomeTwo
+   150 00000018 E871010000              call printString
+   151 0000001D E812020000              call printLinefeed
+   152 00000022 48C7C7[00000000]        mov rdi, welcomeThree
+   153 00000029 E860010000              call printString
+   154 0000002E E801020000              call printLinefeed
+   155                                 
+   156                                 
+   157                                 
+   158 00000033 48C7C7[00000000]        mov rdi, menu1
+   159 0000003A E84F010000              call printString
+   160 0000003F E8F0010000              call printLinefeed
+   161 00000044 48C7C7[00000000]        mov rdi, menu2
+   162 0000004B E83E010000              call printString
+   163 00000050 E8DF010000              call printLinefeed
+   164 00000055 48C7C7[00000000]        mov rdi, menu3
+   165 0000005C E82D010000              call printString
+   166 00000061 E8CE010000              call printLinefeed
+   167 00000066 48C7C7[00000000]        mov rdi, menu4
+   168 0000006D E81C010000              call printString
+   169 00000072 E8BD010000              call printLinefeed
+   170 00000077 48C7C7[00000000]        mov rdi, menu5
+   171 0000007E E80B010000              call printString
+   172 00000083 E8AC010000              call printLinefeed
+   173 00000088 48C7C7[00000000]        mov rdi, menu6
+   174 0000008F E8FA000000              call printString
+   175 00000094 E89B010000              call printLinefeed
+   176 00000099 E896010000              call printLinefeed
+   177 0000009E 48C7C7[00000000]        mov rdi, menu7
+   178 000000A5 E8E4000000              call printString
+   179 000000AA E885010000              call printLinefeed
+   180                                 
+   181                                 
+   182                                 displayPrompt:
+   183 000000AF 48C7C7[00000000]        mov rdi, pmpt
+   184 000000B6 E8D3000000              call printString
+   185                                 
+   186                                 
+   187                                 
+   188                                 
+   189                                 
+   190 000000BB 48C7C3[00000000]        mov rbx, inLine
+   191 000000C2 49C7C400000000          mov r12, 0
+   192                                 readCharacters:
+   193 000000C9 48C7C000000000          mov rax, SYS_read
+   194 000000D0 48C7C700000000          mov rdi, STDIN
+   195 000000D7 488D3425[00000000]      lea rsi, [char]
+   196 000000DF 48C7C201000000          mov rdx, 1
+   197 000000E6 0F05                    syscall
+   198                                 
+   199 000000E8 8A0425[00000000]        mov al, byte[char]
+   200                                 
+   201 000000EF 88C3                    mov bl, al
+   202 000000F1 3C30                    cmp al, EXIT
+   203 000000F3 7457                    je goodBye
+   204 000000F5 3C31                    cmp al, ONE
+   205 000000F7 0F84C8000000            je functionOne
+   206 000000FD 3C32                    cmp al, TWO
+   207 000000FF 0F84D6000000            je functionTwo
+   208 00000105 3C33                    cmp al, THREE
+   209 00000107 0F84E4000000            je functionThree
+   210 0000010D 3C34                    cmp al, FOUR
+   211 0000010F 0F84F2000000            je functionFour
+   212 00000115 3C35                    cmp al, FIVE
+   213 00000117 0F8400010000            je functionFive
+   214 0000011D 3C05                    cmp al, func_max
+   215 0000011F EBFE                    jmp greaterThanMax
+   216                                 
+   217                                 
+   218                                 greaterThanMax:
+   219 00000121 48C7C7[00000000]        mov rdi, greaterThanMaxMessage
+   220 00000128 E861000000              call printString
+   221 0000012D E802010000              call printLinefeed
+   222 00000132 E973FFFFFF              jmp displayPrompt
+   223                                 
+   224 00000137 3C0A                    cmp al, LF
+   225 00000139 7411                    je readDone
+   226 0000013B 49FFC4                  inc r12
+   227 0000013E 4983FC32                cmp r12, STRLEN
+   228 00000142 7D83                    jge readCharacters
+   229                                 
+   230 00000144 8803                    mov byte[rbx], al
+   231 00000146 48FFC3                  inc rbx
+   232 00000149 E976FFFFFF              jmp readCharacters
+   233                                 
+   234                                 readDone:
+   235                                 
+   236                                 
+   237                                 
+   238                                 
+   239                                 
+   240                                 
+   241                                 
+   242                                 
+   243                                 
+   244                                 
+   245                                 goodBye:
+   246 0000014E 48C7C7[00000000]        mov rdi, goodbyeOne
+   247 00000155 E834000000              call printString
+   248 0000015A E8D5000000              call printLinefeed
+   249 0000015F 48C7C7[00000000]        mov rdi, goodbyeTwo
+   250 00000166 E823000000              call printString
+   251 0000016B E8C4000000              call printLinefeed
+   252 00000170 48C7C7[00000000]        mov rdi, goodbyeThree
+   253 00000177 E812000000              call printString
+   254 0000017C E8B3000000              call printLinefeed
+   255 00000181 EBFE                    jmp programEnd
+   256                                 
+   257                                 
+   258                                 
+   259                                 
+   260                                 programEnd:
+   261 00000183 48C7C03C000000          mov rax, SYS_exit
+   262 0000018A 48C7C700000000          mov rdi, EXIT_SUCCESS
+   263 00000191 0F05                    syscall
+   264                                 
+   265                                 
+   266                                 
+   267                                 
+   268                                 
+   269                                 
+   270                                 
+   271                                 [global printString]
+   272                                 printString:
+   273 00000193 55                      push rbp
+   274 00000194 4889DD                  mov rbp, rbx
+   275 00000197 53                      push rbx
+   276                                 
+   277                                 
+   278                                 
+   279                                 
+   280 00000198 4889FB                  mov rbx, rdi
+   281 0000019B 48C7C200000000          mov rdx, 0
+   282                                 
+   283                                 strCountLoop:
+   284 000001A2 803B00                  cmp byte[rbx], NULL
+   285 000001A5 7406                    je strCountDone
+   286 000001A7 48FFC2                  inc rdx
+   287 000001AA 48FFC3                  inc rbx
+   288 000001AD EBF1                    jmp strCountLoop
+   289                                 
+   290                                 strCountDone:
+   291 000001AF 4883FA00                cmp rdx, 0
+   292 000001B3 7411                    je prtDone
+   293                                 
+   294                                 
+   295                                 
+   296 000001B5 48C7C001000000          mov rax, SYS_write
+   297 000001BC 4889FE                  mov rsi, rdi
+   298 000001BF 48C7C701000000          mov rdi, STDOUT
+   299 000001C6 0F05                    syscall
+   300                                 
+   301                                 
+   302                                 
+   303                                 prtDone:
+   304 000001C8 5B                      pop rbx
+   305 000001C9 5D                      pop rbp
+   306 000001CA C3                      ret
+   307                                 
+   308                                 
+   309                                 
+   310                                 
+   311                                 [global functionOne]
+   312                                 functionOne:
+   313 000001CB 48C7C7[00000000]        mov rdi, oneMessage
+   314 000001D2 E8B7FFFFFF              call printString
+   315 000001D7 E858000000              call printLinefeed
+   316 000001DC E968FFFFFF              jmp goodBye
+   317                                 
+   318                                 [global functionTwo]
+   319                                 functionTwo:
+   320 000001E1 48C7C7[00000000]        mov rdi, twoMessage
+   321 000001E8 E8A1FFFFFF              call printString
+   322 000001ED E842000000              call printLinefeed
+   323 000001F2 E952FFFFFF              jmp goodBye
+   324                                 
+   325                                 
+   326                                 [global functionThree]
+   327                                 functionThree:
+   328 000001F7 48C7C7[00000000]        mov rdi, threeMessage
+   329 000001FE E88BFFFFFF              call printString
+   330 00000203 E82C000000              call printLinefeed
+   331 00000208 E93CFFFFFF              jmp goodBye
+   332                                 
+   333                                 [global functionFour]
+   334                                 functionFour:
+   335 0000020D 48C7C7[00000000]        mov rdi, fourMessage
+   336 00000214 E875FFFFFF              call printString
+   337 00000219 E816000000              call printLinefeed
+   338 0000021E E926FFFFFF              jmp goodBye
+   339                                 
+   340                                 [global functionFive]
+   341                                 functionFive:
+   342 00000223 48C7C7[00000000]        mov rdi, fiveMessage
+   343 0000022A E85FFFFFFF              call printString
+   344 0000022F E800000000              call printLinefeed
+   345 00000234 E910FFFFFF              jmp goodBye
+   346                                 
+   347                                 
+   348                                 printLinefeed:
+   349 00000239 48C7C7[00000000]        mov rdi, newLine
+   350 00000240 E849FFFFFF              call printString
+   351 00000245 C3                      ret
+   352                                 
+   353                                 
+   354                                 
+   355                                 
+   356                                 

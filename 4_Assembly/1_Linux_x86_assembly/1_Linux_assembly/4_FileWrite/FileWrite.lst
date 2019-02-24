@@ -1,0 +1,557 @@
+     1                                 %line 1+1 FileWrite.asm
+     2                                 
+     3                                 
+     4                                 
+     5                                 [section .data]
+     6                                 
+     7                                 
+     8                                 
+     9                                 
+    10                                 LF equ 10
+    11                                 NULL equ 0
+    12                                 
+    13                                 TRUE equ 1
+    14                                 FALSE equ 0
+    15                                 
+    16                                 EXIT_SUCCESS equ 0
+    17                                 
+    18                                 STDIN equ 0
+    19                                 STDOUT equ 1
+    20                                 STDERR equ 2
+    21                                 
+    22                                 SYS_read equ 0
+    23                                 SYS_write equ 1
+    24                                 SYS_open equ 2
+    25                                 SYS_close equ 3
+    26                                 SYS_lseek equ 8
+    27                                 SYS_fork equ 57
+    28                                 SYS_exit equ 60
+    29                                 SYS_creat equ 85
+    30                                 SYS_time equ 201
+    31                                 
+    32                                 O_CREAT equ 0x40
+    33                                 O_TRUNC equ 0x200
+    34                                 O_APPEND equ 0x400
+    35                                 
+    36                                 SEEK_END equ 2
+    37                                 
+    38                                 O_RDONLY equ 000000
+    39                                 O_WRONLY equ 000001
+    40                                 O_RDWR equ 000002
+    41                                 
+    42                                 S_IRUSR equ 00400
+    43                                 S_IWUSR equ 00200
+    44                                 S_IXUSR equ 00100
+    45                                 
+    46                                 
+    47                                 
+    48                                 
+    49                                 STRLEN equ 50
+    50                                 
+    51 00000000 2A2A2A2A2A2A2A2A2A-    welcomeOne db "******************************************************", NULL, LF
+    52 00000000 2A2A2A2A2A2A2A2A2A-
+    53 00000000 2A2A2A2A2A2A2A2A2A-
+    54 00000000 2A2A2A2A2A2A2A2A2A-
+    55 00000000 2A2A2A2A2A2A2A2A2A-
+    56 00000000 2A2A2A2A2A2A2A2A2A-
+    57 00000000 000A               
+    58 00000038 2A2A2A2A2A2A57656C-    welcomeTwo db "******Welcome to my first Assembly program1************", NULL, LF
+    59 00000038 636F6D6520746F206D-
+    60 00000038 792066697273742041-
+    61 00000038 7373656D626C792070-
+    62 00000038 726F6772616D312A2A-
+    63 00000038 2A2A2A2A2A2A2A2A2A-
+    64 00000038 2A000A             
+    65 00000071 2A2A2A2A2A2A2A2A2A-    welcomeThree db "******************************************************", NULL, LF
+    66 00000071 2A2A2A2A2A2A2A2A2A-
+    67 00000071 2A2A2A2A2A2A2A2A2A-
+    68 00000071 2A2A2A2A2A2A2A2A2A-
+    69 00000071 2A2A2A2A2A2A2A2A2A-
+    70 00000071 2A2A2A2A2A2A2A2A2A-
+    71 00000071 000A               
+    72                                 
+    73 000000A9 2A2A2A2A2A2A2A2A2A-    goodbyeOne db "******************************************************", NULL, LF
+    74 000000A9 2A2A2A2A2A2A2A2A2A-
+    75 000000A9 2A2A2A2A2A2A2A2A2A-
+    76 000000A9 2A2A2A2A2A2A2A2A2A-
+    77 000000A9 2A2A2A2A2A2A2A2A2A-
+    78 000000A9 2A2A2A2A2A2A2A2A2A-
+    79 000000A9 000A               
+    80 000000E1 2A2A2A2A2A2A2A2A2A-    goodbyeTwo db "**********************GOOD BYE!***********************", NULL, LF
+    81 000000E1 2A2A2A2A2A2A2A2A2A-
+    82 000000E1 2A2A2A2A474F4F4420-
+    83 000000E1 425945212A2A2A2A2A-
+    84 000000E1 2A2A2A2A2A2A2A2A2A-
+    85 000000E1 2A2A2A2A2A2A2A2A2A-
+    86 000000E1 000A               
+    87 00000119 2A2A2A2A2A2A2A2A2A-    goodbyeThree db "******************************************************", NULL, LF
+    88 00000119 2A2A2A2A2A2A2A2A2A-
+    89 00000119 2A2A2A2A2A2A2A2A2A-
+    90 00000119 2A2A2A2A2A2A2A2A2A-
+    91 00000119 2A2A2A2A2A2A2A2A2A-
+    92 00000119 2A2A2A2A2A2A2A2A2A-
+    93 00000119 000A               
+    94                                 
+    95 00000151 50524F4752414D204D-    menu1 db "PROGRAM MENU: Choose an option", NULL, LF
+    96 00000151 454E553A2043686F6F-
+    97 00000151 736520616E206F7074-
+    98 00000151 696F6E000A         
+    99 00000171 312D57726974652066-    menu2 db "1-Write file url.txt", NULL, LF
+   100 00000171 696C652075726C2E74-
+   101 00000171 7874000A           
+   102 00000187 322D417070656E6420-    menu3 db "2-Append to file url.txt (not working yet)", NULL, LF
+   103 00000187 746F2066696C652075-
+   104 00000187 726C2E74787420286E-
+   105 00000187 6F7420776F726B696E-
+   106 00000187 672079657429000A   
+   107 000001B3 332D46756E6374696F-    menu4 db "3-Function3", NULL, LF
+   108 000001B3 6E33000A           
+   109 000001C0 342D46756E6374696F-    menu5 db "4-Function4", NULL, LF
+   110 000001C0 6E34000A           
+   111 000001CD 352D546573745F4675-    menu6 db "5-Test_Function", NULL, LF
+   112 000001CD 6E6374696F6E000A   
+   113 000001DE 302D45786974207072-    menu7 db "0-Exit program", NULL, LF
+   114 000001DE 6F6772616D000A     
+   115                                 
+   116                                 
+   117                                 
+   118                                 
+   119 000001EE 0A46696C6520577269-    header db LF, "File Write Example.", LF, LF, NULL
+   120 000001EE 7465204578616D706C-
+   121 000001EE 652E0A0A00         
+   122 00000205 75726C2E74787400       fileName db "url.txt", NULL
+   123 0000020D 546869732069732061-    url db "This is a cool program!", LF, NULL
+   124 0000020D 20636F6F6C2070726F-
+   125 0000020D 6772616D210A00     
+   126 00000226 1800000000000000       len dq $-url-1
+   127 0000022E 546869732069732061-    urlTwo db "This is a second cool program!", LF, NULL
+   128 0000022E 207365636F6E642063-
+   129 0000022E 6F6F6C2070726F6772-
+   130 0000022E 616D210A00         
+   131 0000024E 1F00000000000000       lenTwo dq $-urlTwo-1
+   132 00000256 577269746520636F6D-    writeDone db "Write completed.", LF, NULL
+   133 00000256 706C657465642E0A00 
+   134 00000268 0000000000000000       fileDescriptor dq 0
+   135 00000270 4572726F72206F7065-    errMsgOpen db "Error opening file.", LF, NULL
+   136 00000270 6E696E672066696C65-
+   137 00000270 2E0A00             
+   138 00000285 4572726F7220777269-    errMsgWrite db "Error writing to file.", LF, NULL
+   139 00000285 74696E6720746F2066-
+   140 00000285 696C652E0A00       
+   141 0000029D 4572726F72206F6E20-    errOnSeek db "Error on lseek to file.", LF, NULL
+   142 0000029D 6C7365656B20746F20-
+   143 0000029D 66696C652E0A00     
+   144                                 
+   145                                 
+   146                                 
+   147                                 
+   148                                 EXIT equ 48
+   149                                 func_max equ 5
+   150 000002B6 456E7465722061206E-    greaterThanMaxMessage db "Enter a number between 0 and 4", NULL, LF
+   151 000002B6 756D62657220626574-
+   152 000002B6 7765656E203020616E-
+   153 000002B6 642034000A         
+   154                                 ONE equ 49
+   155                                 TWO equ 50
+   156                                 THREE equ 51
+   157                                 FOUR equ 52
+   158                                 FIVE equ 53
+   159                                 
+   160                                 
+   161 000002D6 57656C636F6D652074-    oneMessage db "Welcome to function one!", NULL, LF
+   162 000002D6 6F2066756E6374696F-
+   163 000002D6 6E206F6E6521000A   
+   164 000002F0 57656C636F6D652074-    twoMessage db "Welcome to function two!", NULL, LF
+   165 000002F0 6F2066756E6374696F-
+   166 000002F0 6E2074776F21000A   
+   167 0000030A 57656C636F6D652074-    threeMessage db "Welcome to function three!", NULL, LF
+   168 0000030A 6F2066756E6374696F-
+   169 0000030A 6E2074687265652100-
+   170 0000030A 0A                 
+   171 00000326 57656C636F6D652074-    fourMessage db "Welcome to function four!", NULL, LF
+   172 00000326 6F2066756E6374696F-
+   173 00000326 6E20666F757221000A 
+   174 00000341 57656C636F6D652074-    fiveMessage db "Welcome to function five!", NULL, LF
+   175 00000341 6F2066756E6374696F-
+   176 00000341 6E206669766521000A 
+   177                                 
+   178 0000035C 456E7465722073656C-    pmpt db "Enter selection: ", NULL
+   179 0000035C 656374696F6E3A2000 
+   180 0000036E 0A00                   newLine db LF, NULL
+   181                                 
+   182                                 [section .bss]
+   183 00000000 <gap>                  char resb 1
+   184 00000001 <gap>                  inLine resb STRLEN+2
+   185                                 
+   186                                 
+   187                                 [section .text]
+   188                                 [global _start]
+   189                                 _start:
+   190                                 
+   191                                 
+   192                                 
+   193                                 
+   194                                 
+   195 00000000 48C7C7[00000000]        mov rdi, welcomeOne
+   196 00000007 E882010000              call printString
+   197 0000000C E888030000              call printLinefeed
+   198 00000011 48C7C7[00000000]        mov rdi, welcomeTwo
+   199 00000018 E871010000              call printString
+   200 0000001D E877030000              call printLinefeed
+   201 00000022 48C7C7[00000000]        mov rdi, welcomeThree
+   202 00000029 E860010000              call printString
+   203 0000002E E866030000              call printLinefeed
+   204                                 
+   205                                 
+   206                                 
+   207 00000033 48C7C7[00000000]        mov rdi, menu1
+   208 0000003A E84F010000              call printString
+   209 0000003F E855030000              call printLinefeed
+   210 00000044 48C7C7[00000000]        mov rdi, menu2
+   211 0000004B E83E010000              call printString
+   212 00000050 E844030000              call printLinefeed
+   213 00000055 48C7C7[00000000]        mov rdi, menu3
+   214 0000005C E82D010000              call printString
+   215 00000061 E833030000              call printLinefeed
+   216 00000066 48C7C7[00000000]        mov rdi, menu4
+   217 0000006D E81C010000              call printString
+   218 00000072 E822030000              call printLinefeed
+   219 00000077 48C7C7[00000000]        mov rdi, menu5
+   220 0000007E E80B010000              call printString
+   221 00000083 E811030000              call printLinefeed
+   222 00000088 48C7C7[00000000]        mov rdi, menu6
+   223 0000008F E8FA000000              call printString
+   224 00000094 E800030000              call printLinefeed
+   225 00000099 E8FB020000              call printLinefeed
+   226 0000009E 48C7C7[00000000]        mov rdi, menu7
+   227 000000A5 E8E4000000              call printString
+   228 000000AA E8EA020000              call printLinefeed
+   229                                 
+   230                                 
+   231                                 displayPrompt:
+   232 000000AF 48C7C7[00000000]        mov rdi, pmpt
+   233 000000B6 E8D3000000              call printString
+   234                                 
+   235                                 
+   236                                 
+   237                                 
+   238                                 
+   239 000000BB 48C7C3[00000000]        mov rbx, inLine
+   240 000000C2 49C7C400000000          mov r12, 0
+   241                                 readCharacters:
+   242 000000C9 48C7C000000000          mov rax, SYS_read
+   243 000000D0 48C7C700000000          mov rdi, STDIN
+   244 000000D7 488D3425[00000000]      lea rsi, [char]
+   245 000000DF 48C7C201000000          mov rdx, 1
+   246 000000E6 0F05                    syscall
+   247                                 
+   248 000000E8 8A0425[00000000]        mov al, byte[char]
+   249                                 
+   250 000000EF 88C3                    mov bl, al
+   251 000000F1 3C30                    cmp al, EXIT
+   252 000000F3 7457                    je goodBye
+   253 000000F5 3C31                    cmp al, ONE
+   254 000000F7 0F84C8000000            je functionOne
+   255 000000FD 3C32                    cmp al, TWO
+   256 000000FF 0F846C010000            je functionTwo
+   257 00000105 3C33                    cmp al, THREE
+   258 00000107 0F8449020000            je functionThree
+   259 0000010D 3C34                    cmp al, FOUR
+   260 0000010F 0F8457020000            je functionFour
+   261 00000115 3C35                    cmp al, FIVE
+   262 00000117 0F8465020000            je functionFive
+   263 0000011D 3C05                    cmp al, func_max
+   264 0000011F EBFE                    jmp greaterThanMax
+   265                                 
+   266                                 
+   267                                 greaterThanMax:
+   268 00000121 48C7C7[00000000]        mov rdi, greaterThanMaxMessage
+   269 00000128 E861000000              call printString
+   270 0000012D E867020000              call printLinefeed
+   271 00000132 E973FFFFFF              jmp displayPrompt
+   272                                 
+   273 00000137 3C0A                    cmp al, LF
+   274 00000139 7411                    je readDone
+   275 0000013B 49FFC4                  inc r12
+   276 0000013E 4983FC32                cmp r12, STRLEN
+   277 00000142 7D83                    jge readCharacters
+   278                                 
+   279 00000144 8803                    mov byte[rbx], al
+   280 00000146 48FFC3                  inc rbx
+   281 00000149 E976FFFFFF              jmp readCharacters
+   282                                 
+   283                                 readDone:
+   284                                 
+   285                                 
+   286                                 
+   287                                 
+   288                                 
+   289                                 
+   290                                 
+   291                                 
+   292                                 
+   293                                 
+   294                                 goodBye:
+   295 0000014E 48C7C7[00000000]        mov rdi, goodbyeOne
+   296 00000155 E834000000              call printString
+   297 0000015A E83A020000              call printLinefeed
+   298 0000015F 48C7C7[00000000]        mov rdi, goodbyeTwo
+   299 00000166 E823000000              call printString
+   300 0000016B E829020000              call printLinefeed
+   301 00000170 48C7C7[00000000]        mov rdi, goodbyeThree
+   302 00000177 E812000000              call printString
+   303 0000017C E818020000              call printLinefeed
+   304 00000181 EBFE                    jmp programEnd
+   305                                 
+   306                                 
+   307                                 
+   308                                 programEnd:
+   309 00000183 48C7C03C000000          mov rax, SYS_exit
+   310 0000018A 48C7C700000000          mov rdi, EXIT_SUCCESS
+   311 00000191 0F05                    syscall
+   312                                 
+   313                                 
+   314                                 
+   315                                 
+   316                                 
+   317                                 
+   318                                 
+   319                                 [global printString]
+   320                                 printString:
+   321 00000193 55                      push rbp
+   322 00000194 4889DD                  mov rbp, rbx
+   323 00000197 53                      push rbx
+   324                                 
+   325                                 
+   326                                 
+   327                                 
+   328 00000198 4889FB                  mov rbx, rdi
+   329 0000019B 48C7C200000000          mov rdx, 0
+   330                                 
+   331                                 strCountLoop:
+   332 000001A2 803B00                  cmp byte[rbx], NULL
+   333 000001A5 7406                    je strCountDone
+   334 000001A7 48FFC2                  inc rdx
+   335 000001AA 48FFC3                  inc rbx
+   336 000001AD EBF1                    jmp strCountLoop
+   337                                 
+   338                                 strCountDone:
+   339 000001AF 4883FA00                cmp rdx, 0
+   340 000001B3 7411                    je prtDone
+   341                                 
+   342                                 
+   343                                 
+   344 000001B5 48C7C001000000          mov rax, SYS_write
+   345 000001BC 4889FE                  mov rsi, rdi
+   346 000001BF 48C7C701000000          mov rdi, STDOUT
+   347 000001C6 0F05                    syscall
+   348                                 
+   349                                 
+   350                                 
+   351                                 prtDone:
+   352 000001C8 5B                      pop rbx
+   353 000001C9 5D                      pop rbp
+   354 000001CA C3                      ret
+   355                                 
+   356                                 
+   357                                 
+   358                                 
+   359                                 [global functionOne]
+   360                                 functionOne:
+   361 000001CB 48C7C7[00000000]        mov rdi, oneMessage
+   362 000001D2 E8B7FFFFFF              call printString
+   363 000001D7 E8BD010000              call printLinefeed
+   364                                 
+   365 000001DC 48C7C7[00000000]        mov rdi, header
+   366 000001E3 E8A6FFFFFF              call printString
+   367                                 
+   368                                 
+   369                                 
+   370                                 
+   371                                 
+   372                                 
+   373                                 
+   374                                 
+   375                                 
+   376                                 
+   377                                 
+   378                                 
+   379                                 openInputFile:
+   380 000001E8 48C7C055000000          mov rax, SYS_creat
+   381 000001EF 48C7C7[00000000]        mov rdi, fileName
+   382 000001F6 48C7C680010000          mov rsi, S_IRUSR | S_IWUSR
+   383 000001FD 0F05                    syscall
+   384                                 
+   385 000001FF 4883F800                cmp rax, 0
+   386 00000203 7C4E                    jl errorOnOpen
+   387                                 
+   388 00000205 48890425[00000000]      mov qword [fileDescriptor], rax
+   389                                 
+   390                                 
+   391                                 
+   392                                 
+   393                                 
+   394                                 
+   395                                 
+   396                                 
+   397                                 
+   398                                 
+   399                                 
+   400                                 
+   401 0000020D 48C7C001000000          mov rax, SYS_write
+   402 00000214 488B3C25[00000000]      mov rdi, qword [fileDescriptor]
+   403 0000021C 48C7C6[00000000]        mov rsi, url
+   404 00000223 488B1425[00000000]      mov rdx, qword [len]
+   405 0000022B 0F05                    syscall
+   406                                 
+   407 0000022D 4883F800                cmp rax, 0
+   408 00000231 7C31                    jl errorOnWrite
+   409                                 
+   410 00000233 48C7C7[00000000]        mov rdi, writeDone
+   411 0000023A E84FFFFFFF              call printString
+   412                                 
+   413                                 
+   414                                 
+   415                                 
+   416                                 
+   417                                 
+   418 0000023F 48C7C003000000          mov rax, SYS_close
+   419 00000246 488B3C25[00000000]      mov rdi, qword [fileDescriptor]
+   420 0000024E 0F05                    syscall
+   421                                 
+   422 00000250 E9F4FEFFFF              jmp goodBye
+   423                                 
+   424                                 
+   425                                 
+   426                                 
+   427                                 
+   428                                 errorOnOpen:
+   429 00000255 48C7C7[00000000]        mov rdi, errMsgOpen
+   430 0000025C E82DFFFFFF              call printString
+   431 00000261 E9E3FEFFFF              jmp goodBye
+   432                                 
+   433                                 
+   434                                 
+   435                                 
+   436                                 
+   437                                 errorOnWrite:
+   438 00000266 48C7C7[00000000]        mov rdi, errMsgWrite
+   439 0000026D E81CFFFFFF              call printString
+   440 00000272 E9D2FEFFFF              jmp goodBye
+   441                                 
+   442                                 [global functionTwo]
+   443                                 functionTwo:
+   444 00000277 55                      push rbp
+   445 00000278 4889DD                  mov rbp, rbx
+   446 0000027B 53                      push rbx
+   447                                 
+   448 0000027C 48C7C7[00000000]        mov rdi, twoMessage
+   449 00000283 E806FFFFFF              call printString
+   450 00000288 E80C010000              call printLinefeed
+   451                                 
+   452                                 
+   453                                 
+   454                                 
+   455 0000028D 48C7C002000000          mov rax, SYS_open
+   456 00000294 48C7C7[00000000]        mov rdi, fileName
+   457 0000029B 48C7C602000000          mov rsi, O_RDWR
+   458                                 
+   459 000002A2 48890425[00000000]      mov qword [fileDescriptor], rax
+   460 000002AA 4883F800                cmp rax, 0
+   461 000002AE 0F8C80000000            jl errorOnOpenAppend
+   462                                 
+   463                                 
+   464                                 
+   465                                 
+   466 000002B4 48C7C008000000          mov rax, SYS_lseek
+   467 000002BB 488B3C25[00000000]      mov rdi, qword[fileDescriptor]
+   468 000002C3 48C7C600000000          mov rsi, 0
+   469 000002CA 48C7C202000000          mov rdx, 2
+   470 000002D1 0F05                    syscall
+   471                                 
+   472 000002D3 48890425[00000000]      mov qword [fileDescriptor], rax
+   473                                 
+   474 000002DB 4883F800                cmp rax, 0
+   475 000002DF 7C46                    jl errorOnSeekAppend
+   476                                 
+   477                                 
+   478                                 
+   479 000002E1 48C7C001000000          mov rax, SYS_write
+   480 000002E8 488B3C25[00000000]      mov rdi, qword [fileDescriptor]
+   481 000002F0 48C7C6[00000000]        mov rsi, urlTwo
+   482 000002F7 488B1425[00000000]      mov rdx, qword [lenTwo]
+   483 000002FF 0F05                    syscall
+   484                                 
+   485 00000301 4883F800                cmp rax, 0
+   486 00000305 7C42                    jl errorOnWriteAppend
+   487                                 
+   488 00000307 48C7C7[00000000]        mov rdi, writeDone
+   489 0000030E E87BFEFFFF              call printString
+   490                                 
+   491                                 
+   492                                 
+   493                                 
+   494                                 
+   495                                 
+   496 00000313 48C7C003000000          mov rax, SYS_close
+   497 0000031A 488B3C25[00000000]      mov rdi, qword [fileDescriptor]
+   498 00000322 0F05                    syscall
+   499 00000324 E920FEFFFF              jmp goodBye
+   500                                 
+   501                                 
+   502                                 
+   503                                 
+   504                                 
+   505                                 errorOnSeekAppend:
+   506 00000329 48C7C7[00000000]        mov rdi, errOnSeek
+   507 00000330 E859FEFFFF              call printString
+   508 00000335 E90FFEFFFF              jmp goodBye
+   509                                 
+   510                                 errorOnOpenAppend:
+   511 0000033A 48C7C7[00000000]        mov rdi, errMsgOpen
+   512 00000341 E848FEFFFF              call printString
+   513 00000346 E9FEFDFFFF              jmp goodBye
+   514                                 
+   515                                 
+   516                                 
+   517                                 
+   518                                 
+   519                                 errorOnWriteAppend:
+   520 0000034B 48C7C7[00000000]        mov rdi, errMsgWrite
+   521 00000352 E837FEFFFF              call printString
+   522 00000357 E9EDFDFFFF              jmp goodBye
+   523                                 
+   524                                 
+   525                                 
+   526                                 
+   527                                 [global functionThree]
+   528                                 functionThree:
+   529 0000035C 48C7C7[00000000]        mov rdi, threeMessage
+   530 00000363 E826FEFFFF              call printString
+   531 00000368 E82C000000              call printLinefeed
+   532 0000036D E9D7FDFFFF              jmp goodBye
+   533                                 
+   534                                 [global functionFour]
+   535                                 functionFour:
+   536 00000372 48C7C7[00000000]        mov rdi, fourMessage
+   537 00000379 E810FEFFFF              call printString
+   538 0000037E E816000000              call printLinefeed
+   539 00000383 E9C1FDFFFF              jmp goodBye
+   540                                 
+   541                                 [global functionFive]
+   542                                 functionFive:
+   543 00000388 48C7C7[00000000]        mov rdi, fiveMessage
+   544 0000038F E8FAFDFFFF              call printString
+   545 00000394 E800000000              call printLinefeed
+   546 00000399 E9ABFDFFFF              jmp goodBye
+   547                                 
+   548                                 
+   549                                 printLinefeed:
+   550 0000039E 48C7C7[00000000]        mov rdi, newLine
+   551 000003A5 E8E4FDFFFF              call printString
+   552 000003AA C3                      ret
+   553                                 
+   554                                 
+   555                                 
+   556                                 
+   557                                 
