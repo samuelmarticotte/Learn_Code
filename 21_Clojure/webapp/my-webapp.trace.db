@@ -1,0 +1,12 @@
+2018-08-26 12:10:33 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Data conversion error converting "'' (LOCATIONS: X INTEGER)"; SQL statement:
+INSERT INTO locations ( x, y ) VALUES ( ?, ? ) -- (?1, ?2) [22018-193]
+2018-08-26 12:10:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Data conversion error converting "'sad' (LOCATIONS: X INTEGER)"; SQL statement:
+INSERT INTO locations ( x, y ) VALUES ( ?, ? ) -- (?1, ?2) [22018-193]
+2018-08-26 12:11:11 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Data conversion error converting "'asdas' (LOCATIONS: X INTEGER)"; SQL statement:
+INSERT INTO locations ( x, y ) VALUES ( ?, ? ) -- (?1, ?2) [22018-193]
+2018-08-26 12:11:48 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Data conversion error converting "'sdasd' (LOCATIONS: X INTEGER)"; SQL statement:
+INSERT INTO locations ( x, y ) VALUES ( ?, ? ) -- (?1, ?2) [22018-193]
