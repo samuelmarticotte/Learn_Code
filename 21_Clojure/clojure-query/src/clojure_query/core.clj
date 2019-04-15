@@ -1,41 +1,44 @@
 (ns clojure-query.core
   (:require [clojure.java.io :as io]))
-
-(defn banner [title]
-  (println "==================================\\n" title "\\n=================================="))
-(defn usage [message]
-  (println "Usage:\n" message))
 ;;============================READ AND CLEAN DATA
 (defn clean [strings noise]
   ;;remove noise from list of strings
   (for [s strings]
-                (-> s ((apply comp
-                              (for [n noise] #(.replace %1 n "")))))))
+    (-> s ((apply comp (for [n noise] #(.replace %1 n "")))))))
 ;;============================QUESTIONS
-
-(defn ask-question [question ans-one ans-two]
-  ;;ask a question, takes two possible answers and returns one.
-  (def ans "?")
-  (while (and (not= ans ans-one) (not= ans ans-two))        ;;while not one answer or the other
+  (defn ask-question
+    "Ask a question, takes to possible answers and returns one"
+    [question ans-one ans-two]
     (println question)
-    (def ans (read-line)))
-  ans)
-
+    (let [ans (read-line)]
+      (if (some #(= ans %) [ans-one ans-two])
+        ans
+        (recur question ans-one ans-two))))
+;;============================BUILD QUERY
+(defn build-query
+  "This function takes a list of items, and noise to be removed, and returns a formatted query"
+  [items noise]
+  (let [[left right] (if (= (ask-question "Do you want some regexes? (y/n): " "y" "n") "y")
+                       ["/.*" , ".*/"]
+                       ["\""  , "\"" ])
+        regexed-list (for [i items] (str left i right))
+        booleaned-list (interpose
+                         (ask-question "Do you want AND or OR:" "AND" "OR")
+                         regexed-list)]
+        (if (= (ask-question "Clean ALL special characters? (y/n)" "y" "n") "y")
+          (clean booleaned-list noise)
+          booleaned-list)))
 ;;============================MAIN DEF
-(defn -main []
-  (banner "Welcome to BELL QUICK QUERY MAKER")
-  (usage "Supply a list of iocs called list.txt")
-  (def iocs (clojure.string/split-lines (slurp "C:\\Users\\samuel.marticotte\\Desktop\\5_Development\\clojure-query\\resources\\list.txt")))
-  ;(def regex-noregex (ask-question "Do you want some regexes? (y/n): " "y" "n"))
-  ;(def clean-yes-clean-no (ask-question "Do you want to clean some characters? (y/n): " "y" "n"))
-  ;(if (= clean-yes-clean-no "y")(println (clean iocs ["!" "$" "/"])))
-  (def and-or (ask-question "Do you want AND or OR:" "AND" "OR"))
-  (if (= and-or "AND")
-    (println (interpose "AND" (clean iocs ["!" "$" "/"])))
-    (println (interpose "OR" (clean iocs ["!" "$" "/"])))))
-
-;;============================MAIN RUN
+(defn -main
+  "The main function returns a formatted query. "
+  [] ;;/Volumes/128HDD/6_Programming/0_Git_Repositories/Learn_Code/21_Clojure/clojure-query/resources/list.txt
+  (println "============================\nWelcome to IOCS query maker\n=============================")
+  (println "Usage: Supply a list of iocs called list.txt")
+  ;;Read iocs
+  (let [iocs-file "/Volumes/128HDD/6_Programming/0_Git_Repositories/Learn_Code/21_Clojure/clojure-query/resources/list.txt"
+        iocs (clojure.string/split-lines (slurp iocs-file))
+        noise ["!" "$" "" "[" "-" "(" ")" "{" "}" "," "\"" "?" "<" ">" "@" "`" "^"]
+        field "ips:"]
+  ;;Ask for input
+  (println field (build-query iocs noise))))
 (-main)
-
-
-
